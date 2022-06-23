@@ -109,14 +109,14 @@ def verify_decode_jwt(token):
             )
             return payload
 
-        except jwt.ExpiredSignatureError:
-            raise AuthError({
+        except jwt.ExpiredSignatureError as ese:
+            raise AuthError from ese({
                 'code': 'token_expired',
                 'description': 'Token expired.'
             }, 401)
 
-        except jwt.JWTClaimsError:
-            raise AuthError({
+        except jwt.JWTClaimsError as ese:
+            raise AuthError from ese({
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
             }, 401)
@@ -137,7 +137,6 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permission(permission, payload)
-            
             return f(payload, *args, **kwargs)
         return wrapper
     return requires_auth_permission
