@@ -73,7 +73,6 @@ def get_token_auth_header():
 '''
 def check_permission(permission, payload):
     if 'permission' not in payload:
-        print("I am here")
         abort(400)
     if permission not in payload['permission']:
         abort(403)
@@ -84,7 +83,6 @@ def verify_decode_jwt(token):
     jwks = json.loads(jsonurl.read())
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
-    print(f"token {unverified_header}")
     if 'kid' not in unverified_header:
         raise AuthError({
             'code': 'invalid_header',
@@ -138,7 +136,6 @@ def requires_auth(permission=''):
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
-            print(payload)
             check_permission(permission, payload)
             
             return f(payload, *args, **kwargs)
