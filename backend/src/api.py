@@ -48,10 +48,9 @@ def get_drinks():
 '''
 
 @app.route('/drinks-detail',methods=['GET'])
-@requires_auth('get:drinks-detail')
+@requires_auth('get:drink-details')
 def get_drinks_details(payload):
     drinks = Drink.query.all()
-    print(drinks)
     formatted_drink = [drink.long() for drink in drinks]
     return jsonify({
         'success':True,
