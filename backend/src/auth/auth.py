@@ -1,20 +1,22 @@
+"""Authentication file"""
 import json
-from flask import request, _request_ctx_stack,abort
 from functools import wraps
-from jose import jwt
 from urllib.request import urlopen
 
+from flask import abort, request
+from jose import jwt
 
 AUTH0_DOMAIN = 'dev-3jfc9qzs.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'image'
 
 ## AuthError Exception
-'''
-AuthError Exception
-A standardized way to communicate auth failure modes
-'''
+
 class AuthError(Exception):
+    '''
+    AuthError Exception
+    A standardized way to communicate auth failure modes
+    '''
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
@@ -81,6 +83,7 @@ def check_permission(permission, payload):
     return True
 
 def verify_decode_jwt(token):
+    """Takes the token and verifies that it is valid, invalid or expired"""
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
     unverified_header = jwt.get_unverified_header(token)
@@ -122,17 +125,18 @@ def verify_decode_jwt(token):
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
             }, 401)
-        except Exception:
+        except Exception as exc:
             raise AuthError ({
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token.'
-            }, 400)
+            }, 400) from exc
     raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Unable to find the appropriate key.'
             }, 400)
 
 def requires_auth(permission=''):
+    """Decorator for checking authentication for an endpoint"""
     def requires_auth_permission(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
