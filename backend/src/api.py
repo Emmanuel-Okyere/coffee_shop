@@ -56,6 +56,7 @@ def get_drinks_details(payload):
 
     drinks = Drink.query.all()
     formatted_drink = [drink.long() for drink in drinks]
+    print(formatted_drink)
     return jsonify({
         'success':True,
         'drinks': formatted_drink

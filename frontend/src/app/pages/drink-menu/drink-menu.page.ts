@@ -23,13 +23,11 @@ export class DrinkMenuPage implements OnInit {
   }
 
   async openForm(activedrink: Drink = null) {
-    console.log("activedrink", activedrink);
 
     if (!this.auth.can('get:drink-details')) {
       return;
     }
 
-    console.log("activedrink 1", activedrink);
     const modal = await this.modalCtrl.create({
       component: DrinkFormComponent,
       componentProps: { drink: activedrink, isNew: !activedrink }
