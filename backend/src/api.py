@@ -56,7 +56,6 @@ def get_drinks_details(payload):
 
     drinks = Drink.query.all()
     formatted_drink = [drink.long() for drink in drinks]
-    print(formatted_drink)
     return jsonify({
         'success':True,
         'drinks': formatted_drink
@@ -145,7 +144,7 @@ def delete_drinks(token, drink_id):
     drink.delete()
     return jsonify({
         "success":True,
-        "delete":drink_id
+        "deleted":drink_id
     })
 # Error Handling
 
@@ -193,3 +192,12 @@ def auth_error(error):
                     "error": 401,
                     "message": "Authorization header is expected."
                     }), 401
+
+@app.errorhandler(403)
+def permission_error(error):
+    """Catching permission error"""
+    return jsonify({
+        "success":False,
+        "error":403,
+        "message": "Not Authorized"
+    }), 403
