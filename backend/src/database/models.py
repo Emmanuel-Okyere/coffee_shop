@@ -78,7 +78,8 @@ class Drink(db.Model):
         '''
         long form representation of the Drink model
         '''
-        long_recipe = [{"name":r["name"], 'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe)]
+        long_recipe = [{"name":r["name"], 'color': r['color'], 'parts': r['parts']}\
+            for r in json.loads(self.recipe)]
         return {
             'id': self.id,
             'title': self.title,
