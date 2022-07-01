@@ -5,7 +5,7 @@ from urllib.request import urlopen
 
 from flask import abort, request
 from jose import jwt
-
+from jose.exceptions import ExpiredSignatureError, JWTClaimsError
 AUTH0_DOMAIN = 'dev-3jfc9qzs.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'image'
@@ -114,17 +114,17 @@ def verify_decode_jwt(token):
             )
             return payload
 
-        except jwt.ExpiredSignatureError as ese:
-            raise AuthError from ese({
+        except ExpiredSignatureError as ese:
+            raise AuthError({
                 'code': 'token_expired',
                 'description': 'Token expired.'
-            }, 401)
+            }, 401) from ese
 
-        except jwt.JWTClaimsError as ese:
-            raise AuthError from ese({
+        except JWTClaimsError as ese:
+            raise AuthError({
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
-            }, 401)
+            }, 401) from ese
         except Exception as exc:
             raise AuthError ({
                 'code': 'invalid_header',
