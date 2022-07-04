@@ -10,7 +10,7 @@ I created APIs to be accessed by the frontend.
 ## FRONTEND
 The frontend was developed with Typescript and Angular Framework.
 
-Each Stack has it own README file included so make reference to that.
+Each Stack has it own README file included so make reference to that for instructions on how to run the application.
 
 [Backend](https://github.com/Emmanuel-Okyere/coffee_shop/tree/main/backend)
 
